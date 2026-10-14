@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Pipeline Quest</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700&family=Cinzel:wght@600;800&family=Noto+Sans+Runic&display=swap">
+		<link rel="stylesheet" href="style.css">
+		<script type="module" src="app.js"></script>
+	</head>
+	<body>
+		<header class="hud">
+			<p class="hud-chip">Realm <strong>{{ENV}}</strong></p>
+			<p class="hud-chip">Build <strong>{{VERSION}}</strong></p>
+		</header>
+
+		<main id="world">
+			<section class="hero">
+				<h1 class="title">Pipeline Quest</h1>
+				<p class="lede">Forge one change on your laptop and carry it across six realms to the live site. Finish a quest to throw the axe forward.</p>
+			</section>
+
+			<section class="map" aria-label="Pipeline stages">
+				<div class="track"><div class="track-fill"></div></div>
+				<ol class="stages" id="stages">
+					<li class="stage"><span class="node"><span class="rune">ᚠ</span></span><span class="realm">Midgard</span><span class="step-name">Branch</span></li>
+					<li class="stage"><span class="node"><span class="rune">ᚢ</span></span><span class="realm">Alfheim</span><span class="step-name">Pull request</span></li>
+					<li class="stage"><span class="node"><span class="rune">ᚦ</span></span><span class="realm">Niflheim</span><span class="step-name">Test</span></li>
+					<li class="stage"><span class="node"><span class="rune">ᚨ</span></span><span class="realm">Vanaheim</span><span class="step-name">Merge</span></li>
+					<li class="stage"><span class="node"><span class="rune">ᚱ</span></span><span class="realm">Muspelheim</span><span class="step-name">Deploy</span></li>
+					<li class="stage"><span class="node"><span class="rune">ᚲ</span></span><span class="realm">Asgard</span><span class="step-name">Live</span></li>
+				</ol>
+				<div class="axe" id="axe" aria-hidden="true">
+					<svg viewBox="0 0 48 48">
+						<path class="haft" d="M12 44 L33 9" />
+						<path class="grip" d="M14 40.5 L17.5 34.5" />
+						<path class="blade" d="M29 7 L35 3 Q47 9 45 25 Q39 19 33 19 Z" />
+						<path class="edge" d="M35 3 Q47 9 45 25" />
+					</svg>
+				</div>
+			</section>
+
+			<section class="quests" aria-labelledby="quest-title">
+				<div class="xp">
+					<h2 id="quest-title" class="level"><span id="rank">Wanderer</span> <span class="lvl">Lv <span id="level">1</span></span></h2>
+					<progress id="bar" max="100" value="0">0%</progress>
+					<p class="xp-count"><span id="xp">0</span> / <span id="xp-total">0</span> XP</p>
+				</div>
+				<ul id="steps" class="steps">
+					<li><label><input type="checkbox"><span>Create a public repo on GitHub</span></label></li>
+					<li><label><input type="checkbox"><span>Push the main and develop branches</span></label></li>
+					<li><label><input type="checkbox"><span>Set Pages source to GitHub Actions</span></label></li>
+					<li><label><input type="checkbox"><span>Allow develop in the github-pages environment</span></label></li>
+					<li><label><input type="checkbox"><span>Add a ruleset for main and develop</span></label></li>
+					<li><label><input type="checkbox"><span>Change a line on a feature branch and open a PR to develop</span></label></li>
+					<li><label><input type="checkbox"><span>Merge it and find your change on /staging/</span></label></li>
+					<li><label><input type="checkbox"><span>Merge develop into main and see it live</span></label></li>
+				</ul>
+				<p class="toast" id="toast" role="status" aria-live="polite"></p>
+			</section>
+		</main>
+
+		<footer>
+			<p>Practice change: edit this line in a feature branch and watch it go live.</p>
+		</footer>
+
+		<dialog class="victory" id="victory" aria-labelledby="victory-title">
+			<div class="embers" id="embers" aria-hidden="true"></div>
+			<svg class="rune-ring" viewBox="0 0 200 200" aria-hidden="true">
+				<defs>
+					<path id="ring-path" d="M100 100 m-84 0 a84 84 0 1 1 168 0 a84 84 0 1 1 -168 0" />
+				</defs>
+				<circle cx="100" cy="100" r="96" />
+				<circle cx="100" cy="100" r="72" />
+				<text><textPath href="#ring-path">ᚠᚢᚦᚨᚱᚲᚷᚹ ᚺᚾᛁᛃᛇᛈᛉᛊ ᛏᛒᛖᛗᛚᛜᛞᛟ ᚠᚢᚦᚨᚱᚲᚷᚹ ᚺᚾᛁᛃᛇᛈᛉᛊ</textPath></text>
+			</svg>
+			<div class="victory-card">
+				<h2 id="victory-title" class="victory-title">Congratulations</h2>
+				<p class="victory-text">Your change crossed every realm: branch, pull request, tests, merge and deploy. It is live now.</p>
+				<p class="victory-stats"><span id="victory-xp">1000</span> XP earned. Rank: Legend.</p>
+				<div class="victory-actions">
+					<button type="button" class="btn btn-primary" id="victory-close">Continue</button>
+					<button type="button" class="btn" id="victory-replay">Play again</button>
+				</div>
+			</div>
+		</dialog>
+	</body>
+</html>

@@ -1,0 +1,10 @@
+{
+	"name": "cicd-demo-site",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"test": "node --test \"tests/**/*.test.js\"",
+		"check:html": "npx --yes html-validate@9 site/index.html",
+		"start": "python3 -m http.server 8000 --directory site"
+	}
+}

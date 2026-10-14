@@ -1,0 +1,69 @@
+name: Pipeline
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  # CI: runs on every PR and every merge.
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Unit tests
+        run: npm test
+      - name: HTML check
+        run: npm run check:html
+
+  # CD: only after a merge (push), never for a PR.
+  build:
+    name: Build site
+    needs: test
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: main -> /   develop -> /staging/
+        run: |
+          mkdir -p _site/staging
+          stamp() {
+            git archive "origin/$1" site | tar -x --strip-components=1 -C "$2"
+            sed -i "s/{{ENV}}/$3/g; s/{{VERSION}}/$(git rev-parse --short "origin/$1")/g" "$2/index.html"
+          }
+          stamp main _site Production
+          if git rev-parse --verify -q origin/develop >/dev/null; then
+            stamp develop _site/staging Staging
+          fi
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
